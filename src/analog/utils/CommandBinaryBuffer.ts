@@ -1592,24 +1592,24 @@ CommandBinaryBuffer.getLegacyHourCounterSize = ( hourCounter: ILegacyHourCounter
 
 
 CommandBinaryBuffer.prototype.getExtendedValue = function (): number {
-    let value = 0;
+    let value = 0n;
     let isByteExtended = true;
     // byte offset
-    let position = 0;
+    let position = 0n;
 
     while ( isByteExtended && this.offset <= this.data.length ) {
         const byte = this.getUint8();
 
         isByteExtended = !!(byte & EXTEND_BIT_MASK);
-        value += (byte & 0x7f) << (7 * position);
+        value += (BigInt(byte) & 0x7fn) << (7n * BigInt(position));
         ++position;
     }
 
     if ( value < 0 ) {
-        value = 0;
+        value = 0n;
     }
 
-    return value;
+    return Number(value);
 };
 
 
@@ -1621,11 +1621,11 @@ CommandBinaryBuffer.prototype.setExtendedValue = function ( value: number ) {
     }
 
     const data = [];
-    let encodedValue = value;
+    let encodedValue = BigInt(value);
 
     while ( encodedValue ) {
-        data.push(EXTEND_BIT_MASK | (encodedValue & 0x7f));
-        encodedValue >>= 7;
+        data.push(EXTEND_BIT_MASK | Number(encodedValue & 0x7fn));
+        encodedValue >>= 7n;
     }
 
     const lastByte = data.pop();

@@ -94,6 +94,20 @@ export const examples: command.TCommandExamples = {
             0x18, 0x07,
             0xb0, 0x10, 0xd2, 0x3f, 0xa4, 0x01, 0x4b
         ]
+    },
+    'single channel 1 - big value': {
+        id,
+        name,
+        headerSize,
+        parameters: {
+            channelList: [
+                {value: 2147483648, index: 1}
+            ]
+        },
+        bytes: [
+            0x18, 0x06,
+            0x01, 0x80, 0x80, 0x80, 0x80, 0x08
+        ]
     }
 };
 
